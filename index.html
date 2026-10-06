@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMARTPRO - Digitalización y Eficiencia Productiva Láctea</title>
+  <meta name="description" content="Software de gestión integral para plantas lácteas: Control de calidad, trazabilidad, inventarios, finanzas e impacto en justicia social.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body class="dark-theme">
+
+  <!-- Header Institucional -->
+  <header class="app-header">
+    <div class="top-slogan-bar">
+      <div class="slogan-container">
+        <i class="fa-solid fa-hands-holding-heart slogan-icon"></i>
+        <span class="slogan-text">“Acompañando al Pueblo con caridad y justicia social”</span>
+      </div>
+      <div class="header-right-meta">
+        <span class="status-badge live-pulse">
+          <i class="fa-solid fa-circle"></i> Planta Activa | Sensores en Línea
+        </span>
+        <span class="time-display" id="liveClock">--:--:--</span>
+        <button class="theme-toggle-btn" id="btnThemeToggle" title="Cambiar Tema">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-nav-bar">
+      <div class="brand-box">
+        <div class="brand-logo-icon">
+          <i class="fa-solid fa-cow"></i>
+        </div>
+        <div class="brand-titles">
+          <h1>SMARTPRO <span class="v-tag">v3.5</span></h1>
+          <p>Digitalización & Eficiencia Productiva Láctea</p>
+        </div>
+      </div>
+
+      <nav class="nav-tabs">
+        <button class="nav-btn active" data-tab="tab-dashboard">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Dashboard Executive</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-calidad">
+          <i class="fa-solid fa-vial-circle-check"></i>
+          <span>Calidad & Recepción</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-trazabilidad">
+          <i class="fa-solid fa-diagram-project"></i>
+          <span>Trazabilidad</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-inventario">
+          <i class="fa-solid fa-boxes-stacked"></i>
+          <span>Inventario & Frío</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-finanzas">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Finanzas & Costos</span>
+        </button>
+        <button class="nav-btn" data-tab="tab-social">
+          <i class="fa-solid fa-hand-holding-hand"></i>
+          <span>Justicia Social</span>
+        </button>
+      </nav>
+
+      <div class="header-actions">
+        <button class="btn-action primary" id="btnNuevoLote">
+          <i class="fa-solid fa-plus"></i> Nueva Recepción
+        </button>
+        <button class="btn-action outline" id="btnImprimirReporte">
+          <i class="fa-solid fa-file-pdf"></i> Reporte
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Container -->
+  <main class="app-main-content">
+
+    <!-- Hero Banner Section -->
+    <section class="hero-banner">
+      <div class="hero-overlay"></div>
+      <img src="smartpro_dairy_plant.jpg" alt="Planta Láctea SMARTPRO" class="hero-bg-img">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <i class="fa-solid fa-microchip"></i> Prototipo de Digitalización Nivel 4.0
+        </div>
+        <h2>Control Integral de la Planta Láctea</h2>
+        <p>Optimizando el rendimiento industrial de la leche, asegurando inocuidad alimentaria y garantizando un precio justo y solidario para los pequeños productores campesinos.</p>
+        <div class="hero-metrics">
+          <div class="hero-metric-item">
+            <span class="val" id="metricLecheHoy">14,500 L</span>
+            <span class="lbl">Recepción Diaria</span>
+          </div>
+          <div class="hero-metric-divider"></div>
+          <div class="hero-metric-item">
+            <span class="val" id="metricRendimiento">9.4 L/Kg</span>
+            <span class="lbl">Rendimiento Quesero</span>
+          </div>
+          <div class="hero-metric-divider"></div>
+          <div class="hero-metric-item">
+            <span class="val text-emerald" id="metricOEE">94.8%</span>
+            <span class="lbl">Eficiencia OEE</span>
+          </div>
+          <div class="hero-metric-divider"></div>
+          <div class="hero-metric-item">
+            <span class="val text-amber" id="metricFamilias">128</span>
+            <span class="lbl">Familias Beneficiadas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: DASHBOARD EXECUTIVE -->
+    <section class="tab-pane active" id="tab-dashboard">
+      <div class="section-title-bar">
+        <div>
+          <h2><i class="fa-solid fa-gauge-high"></i> Panel General de Toma de Decisiones</h2>
+          <p>Vista consolidada en tiempo real de operaciones, eficiencia y parámetros críticos</p>
+        </div>
+        <div class="filter-controls">
+          <select id="dashPeriodSelect" class="form-select">
+            <option value="today">Hoy (Turno Actual)</option>
+            <option value="week" selected>Esta Semana</option>
+            <option value="month">Este Mes</option>
+          </select>
+          <button class="btn-refresh" id="btnRefreshDash" title="Actualizar datos">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card glass-card border-left-cyan">
+          <div class="kpi-header">
+            <span class="kpi-title">Volumen Leche Recibida</span>
+            <div class="kpi-icon cyan"><i class="fa-solid fa-bottle-droplet"></i></div>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-val" id="kpiVolumen">38,450 L</span>
+            <span class="kpi-sub text-emerald"><i class="fa-solid fa-arrow-trend-up"></i> +8.2% vs semana ant.</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glass-card border-left-emerald">
+          <div class="kpi-header">
+            <span class="kpi-title">Tasa de Aceptación Calidad</span>
+            <div class="kpi-icon emerald"><i class="fa-solid fa-shield-virus"></i></div>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-val" id="kpiCalidad">97.4%</span>
+            <span class="kpi-sub text-emerald"><i class="fa-solid fa-check-double"></i> 0% Antibióticos detectados</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glass-card border-left-amber">
+          <div class="kpi-header">
+            <span class="kpi-title">Producción de Queso / Yogur</span>
+            <div class="kpi-icon amber"><i class="fa-solid fa-cheese"></i></div>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-val" id="kpiProduccion">3,920 Kg</span>
+            <span class="kpi-sub text-amber"><i class="fa-solid fa-cubes"></i> 4 Lotes en Pasteurización</span>
+          </div>
+        </div>
+
+        <div class="kpi-card glass-card border-left-purple">
+          <div class="kpi-header">
+            <span class="kpi-title">Impacto Social & Pago Justo</span>
+            <div class="kpi-icon purple"><i class="fa-solid fa-handshake-angle"></i></div>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-val" id="kpiPagoJusto">$ 2,450 / L</span>
+            <span class="kpi-sub text-purple"><i class="fa-solid fa-heart"></i> +15% sobre precio de mercado</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="grid-2-col gap-20 margin-top-20">
+        <div class="glass-card chart-box">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-chart-area"></i> Flujo Diario de Leche vs Producción</h3>
+            <span class="badge info">Litros procesados por día</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chartFlujoLeche"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card chart-box">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-chart-pie"></i> Distribución de Productos Derivados</h3>
+            <span class="badge success">Aprovechamiento de la materia prima</span>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chartProductosPie"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Machine Telemetry & AI Recommendations -->
+      <div class="grid-3-col gap-20 margin-top-20">
+        <div class="glass-card col-span-2">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-industry"></i> Estado del Equipamiento de Planta (OEE)</h3>
+            <button class="btn-sm outline" id="btnSimularSensores"><i class="fa-solid fa-bolt"></i> Simular Telemetría</button>
+          </div>
+          <div class="machine-status-list">
+            <div class="machine-item">
+              <div class="machine-info">
+                <span class="machine-name"><i class="fa-solid fa-temperature-arrow-up"></i> Pasteurizador HTST #01</span>
+                <span class="machine-spec">Capacidad: 5,000 L/h | Temp Target: 72.5°C</span>
+              </div>
+              <div class="machine-gauge">
+                <div class="gauge-bar-bg"><div class="gauge-bar-fill green" style="width: 96%;"></div></div>
+                <span class="gauge-val">72.4°C</span>
+              </div>
+              <span class="status-pill status-ok">OPERATIVO</span>
+            </div>
+
+            <div class="machine-item">
+              <div class="machine-info">
+                <span class="machine-name"><i class="fa-solid fa-rotate"></i> Desnatadora & Homogeneizadora</span>
+                <span class="machine-spec">Velocidad: 6,200 RPM | Grasa salida: 3.2%</span>
+              </div>
+              <div class="machine-gauge">
+                <div class="gauge-bar-bg"><div class="gauge-bar-fill green" style="width: 92%;"></div></div>
+                <span class="gauge-val">6,180 RPM</span>
+              </div>
+              <span class="status-pill status-ok">OPERATIVO</span>
+            </div>
+
+            <div class="machine-item">
+              <div class="machine-info">
+                <span class="machine-name"><i class="fa-solid fa-dumpster-fire"></i> Tina Quesera Automatizada #03</span>
+                <span class="machine-spec">Capacidad: 3,000 L | Coagulación en proceso</span>
+              </div>
+              <div class="machine-gauge">
+                <div class="gauge-bar-bg"><div class="gauge-bar-fill warning" style="width: 78%;"></div></div>
+                <span class="gauge-val">34.1°C</span>
+              </div>
+              <span class="status-pill status-warning">CORTE DULCE</span>
+            </div>
+
+            <div class="machine-item">
+              <div class="machine-info">
+                <span class="machine-name"><i class="fa-solid fa-snowflake"></i> Cámara Frigorífica 01 (Maduración)</span>
+                <span class="machine-spec">Temp Control: 4.0°C | Humedad: 85%</span>
+              </div>
+              <div class="machine-gauge">
+                <div class="gauge-bar-bg"><div class="gauge-bar-fill green" style="width: 98%;"></div></div>
+                <span class="gauge-val">4.1°C</span>
+              </div>
+              <span class="status-pill status-ok">ESTABLE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-card ai-advisor-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-brain text-amber"></i> Asistente SMARTPRO</h3>
+            <span class="badge warning">IA de Eficiencia</span>
+          </div>
+          <div class="ai-suggestions-list">
+            <div class="ai-suggestion-box">
+              <div class="ai-icon"><i class="fa-solid fa-lightbulb text-amber"></i></div>
+              <div class="ai-text">
+                <strong>Optimización de Grasa en Lote #L-204</strong>
+                <p>La leche recibida de la Cooperativa San Isidro tiene 3.9% de grasa. Se sugiere destinar a Queso Gouda para maximizar rendimiento (+12% ganancia).</p>
+              </div>
+            </div>
+
+            <div class="ai-suggestion-box">
+              <div class="ai-icon"><i class="fa-solid fa-clock-rotate-left text-cyan"></i></div>
+              <div class="ai-text">
+                <strong>Mantenimiento Preventivo</strong>
+                <p>La bomba de transferencia #02 completó 450 horas de operación. Programar revisión de sellos para evitar mermas.</p>
+              </div>
+            </div>
+
+            <div class="ai-suggestion-box">
+              <div class="ai-icon"><i class="fa-solid fa-hand-holding-heart text-emerald"></i></div>
+              <div class="ai-text">
+                <strong>Premio a la Calidad Campesina</strong>
+                <p>3 pequeños ganaderos superaron el 3.3% de proteína este mes. Aplicar bonificación solidaria de $150/L.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: CONTROL DE CALIDAD Y RECEPCIÓN -->
+    <section class="tab-pane" id="tab-calidad">
+      <div class="section-title-bar">
+        <div>
+          <h2><i class="fa-solid fa-vial-circle-check"></i> Control de Calidad y Recepción de Leche Cruda</h2>
+          <p>Filtro de inocuidad, análisis fisicoquímico, prueba de reductasa y determinación de bonificaciones</p>
+        </div>
+        <button class="btn-action primary" id="btnAbrirModalForm">
+          <i class="fa-solid fa-plus"></i> Registrar Nueva Recepción
+        </button>
+      </div>
+
+      <!-- Quick Analysis Calculator / Inspector -->
+      <div class="grid-3-col gap-20">
+        <div class="glass-card col-span-1">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-flask"></i> Analizador de Calidad Express</h3>
+          </div>
+          <form id="expressQualityForm" class="quality-calculator-form">
+            <div class="form-group">
+              <label>Temperatura de Llegada (°C)</label>
+              <input type="number" step="0.1" id="calcTemp" value="4.5" class="form-input">
+              <small class="hint">Óptimo: 2.0°C - 6.0°C</small>
+            </div>
+            <div class="form-group">
+              <label>Acidez Dornic (°D)</label>
+              <input type="number" step="0.5" id="calcAcidez" value="16.5" class="form-input">
+              <small class="hint">Óptimo: 14.0°D - 18.0°D</small>
+            </div>
+            <div class="form-group">
+              <label>% Materia Grasa</label>
+              <input type="number" step="0.1" id="calcGrasa" value="3.6" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>% Proteína</label>
+              <input type="number" step="0.1" id="calcProteina" value="3.2" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Prueba de Antibióticos (Snap Test)</label>
+              <select id="calcAntibioticos" class="form-select">
+                <option value="NEGATIVO">NEGATIVO (Apto)</option>
+                <option value="POSITIVO">POSITIVO (Rechazo Crítico)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tiempo Reductasa MBRT (Horas)</label>
+              <input type="number" step="0.5" id="calcMBRT" value="5.5" class="form-input">
+              <small class="hint">> 4.0 hrs = Leche de Primera</small>
+            </div>
+            <button type="button" id="btnCalcularCalidad" class="btn-action primary full-width">
+              <i class="fa-solid fa-calculator"></i> Evaluar Lote
+            </button>
+          </form>
+
+          <div class="quality-eval-result hidden" id="qualityResultBox">
+            <div class="eval-badge-header" id="evalBadgeHeader">
+              <!-- JS Populated -->
+            </div>
+            <div class="eval-details">
+              <div class="eval-row"><span>Categoría:</span> <strong id="evalCat">--</strong></div>
+              <div class="eval-row"><span>Precio Base:</span> <strong id="evalPrecioBase">$ 2,100 / L</strong></div>
+              <div class="eval-row"><span>Bonif. Calidad:</span> <strong id="evalBonif" class="text-emerald">+$ 0 / L</strong></div>
+              <div class="eval-row"><span>PAGO FINAL PRODUCTOR:</span> <strong id="evalPagoFinal" class="text-cyan">$ 2,100 / L</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recepciones Recientes Table -->
+        <div class="glass-card col-span-2">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-list-check"></i> Registro de Lotes Recibidos Hoy</h3>
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="searchCalidad" placeholder="Buscar por proveedor o lote..." class="form-input-sm">
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="tablaCalidad">
+              <thead>
+                <tr>
+                  <th>Lote ID</th>
+                  <th>Proveedor</th>
+                  <th>Volumen</th>
+                  <th>Temp</th>
+                  <th>Acidez</th>
+                  <th>Grasa/Prot</th>
+                  <th>Antibióticos</th>
+                  <th>Dictamen</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyCalidad">
+                <!-- JS populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: TRAZABILIDAD Y FLUJO DE PLANTA -->
+    <section class="tab-pane" id="tab-trazabilidad">
+      <div class="section-title-bar">
+        <div>
+          <h2><i class="fa-solid fa-diagram-project"></i> Genealogía y Trazabilidad de Producción</h2>
+          <p>Rastreabilidad 360°: Desde el establo del pequeño productor hasta la mesa del consumidor</p>
+        </div>
+        <div class="search-trace-box">
+          <input type="text" id="inputTraceCode" value="LOT-2026-089" class="form-input" placeholder="Ingrese Código de Lote...">
+          <button class="btn-action primary" id="btnBuscarTrace"><i class="fa-solid fa-searchengin"></i> Rastrear Lote</button>
+        </div>
+      </div>
+
+      <!-- Pipeline Visualization -->
+      <div class="glass-card margin-bottom-20">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-route"></i> Flujo del Proceso Tecnológico Lácteo</h3>
+          <span class="badge info">Visualización de Etapas</span>
+        </div>
+        <div class="pipeline-stepper">
+          <div class="step-card active" data-step="1">
+            <div class="step-num">1</div>
+            <div class="step-icon"><i class="fa-solid fa-truck-droplet"></i></div>
+            <div class="step-title">Recepción & Tanque</div>
+            <div class="step-sub">Filtro & Análisis</div>
+          </div>
+          <div class="step-line active"></div>
+          <div class="step-card active" data-step="2">
+            <div class="step-num">2</div>
+            <div class="step-icon"><i class="fa-solid fa-temperature-arrow-up"></i></div>
+            <div class="step-title">Pasteurización</div>
+            <div class="step-sub">72°C x 15 seg</div>
+          </div>
+          <div class="step-line active"></div>
+          <div class="step-card active" data-step="3">
+            <div class="step-num">3</div>
+            <div class="step-icon"><i class="fa-solid fa-vial"></i></div>
+            <div class="step-title">Fermentación / Coagulación</div>
+            <div class="step-sub">Inoculado & Cuajo</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-card" data-step="4">
+            <div class="step-num">4</div>
+            <div class="step-icon"><i class="fa-solid fa-box-open"></i></div>
+            <div class="step-title">Envasado & Moldeo</div>
+            <div class="step-sub">Sellado al Vacío</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step-card" data-step="5">
+            <div class="step-num">5</div>
+            <div class="step-icon"><i class="fa-solid fa-snowflake"></i></div>
+            <div class="step-title">Cámara Fría & Despacho</div>
+            <div class="step-sub">Despacho Comunitario</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Batch Lifecycle Detail Card -->
+      <div class="glass-card" id="traceDetailCard">
+        <div class="card-header">
+          <h3><i class="fa-solid fa-folder-tree"></i> Hoja de Vida Completa - Lote <span id="traceBatchId" class="text-cyan">LOT-2026-089</span></h3>
+          <span class="badge success" id="traceStatusBadge">EN PROCESO DE CURADO</span>
+        </div>
+        
+        <div class="trace-grid">
+          <!-- Origen Leche -->
+          <div class="trace-box">
+            <h4><i class="fa-solid fa-tractor text-amber"></i> 1. Origen de Materia Prima</h4>
+            <ul>
+              <li><strong>Productor / Asociación:</strong> Coovamoras / Asoc. San Isidro</li>
+              <li><strong>Finca Origen:</strong> El Paráiso & Los Cedros (Vereda El Carmen)</li>
+              <li><strong>Volumen Entregado:</strong> 3,200 Litros</li>
+              <li><strong>Hora de Recepción:</strong> 06:45 AM</li>
+              <li><strong>Conductor Cisterna:</strong> Juan Pérez (Placa XYZ-987)</li>
+            </ul>
+          </div>
+
+          <!-- Pruebas Laboratorio -->
+          <div class="trace-box">
+            <h4><i class="fa-solid fa-microscope text-cyan"></i> 2. Control de Calidad Laboratorio</h4>
+            <ul>
+              <li><strong>Grasa / Proteína:</strong> 3.7% / 3.3% (Grado A Excelencia)</li>
+              <li><strong>Acidez Dornic:</strong> 16.0 °D</li>
+              <li><strong>Prueba Antibiótico:</strong> NEGATIVO (Certificado Clean)</li>
+              <li><strong>Bacteriología MBRT:</strong> 6.0 Horas (Excelente)</li>
+              <li><strong>Analista a Cargo:</strong> Dra. Luisa Morales</li>
+            </ul>
+          </div>
+
+          <!-- Transformación -->
+          <div class="trace-box">
+            <h4><i class="fa-solid fa-gears text-purple"></i> 3. Transformación Industrial</h4>
+            <ul>
+              <li><strong>Línea Destino:</strong> Queso Campesino Pasteurizado (1 Kg)</li>
+              <li><strong>Tina de Proceso:</strong> Tina Automática #02</li>
+              <li><strong>Cultivo Lácteo:</strong> Choosit STI-12 (Lote C-902)</li>
+              <li><strong>Cuajo Utilizado:</strong> Quimosina Recombinante 1:10,000</li>
+              <li><strong>Rendimiento Obtenido:</strong> 340 Kg Queso (9.41 L/Kg)</li>
+            </ul>
+          </div>
+
+          <!-- Distribución -->
+          <div class="trace-box">
+            <h4><i class="fa-solid fa-store text-emerald"></i> 4. Destino & Impacto Social</h4>
+            <ul>
+              <li><strong>Fecha Vencimiento:</strong> 15 de Noviembre, 2026</li>
+              <li><strong>Destino Principal:</strong> Red de Comedores Comunitarios & Tiendas de Barrio</li>
+              <li><strong>Precio de Venta Sugerido:</strong> $ 14,500 / Kg (Social Justo)</li>
+              <li><strong>Certificado Inocuidad:</strong> INVIMA-SMARTPRO-2026-99</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: INVENTARIOS Y CADENA DE FRÍO -->
+    <section class="tab-pane" id="tab-inventario">
+      <div class="section-title-bar">
+        <div>
+          <h2><i class="fa-solid fa-boxes-stacked"></i> Inventarios, Almacén & Monitoreo de Cadena de Frío</h2>
+          <p>Control de materias primas, productos terminados y sensores de frigoríficos en tiempo real</p>
+        </div>
+        <button class="btn-action outline" id="btnSimularAlertaFrio"><i class="fa-solid fa-triangle-exclamation"></i> Simular Alerta Térmica</button>
+      </div>
+
+      <!-- Cold Rooms Telemetry Bar -->
+      <div class="grid-3-col gap-20 margin-bottom-20">
+        <div class="glass-card cold-room-card" id="coldRoom1">
+          <div class="cold-header">
+            <h4><i class="fa-solid fa-snowflake"></i> Cámara 01: Leche Cruda & Silos</h4>
+            <span class="status-pill status-ok">OK</span>
+          </div>
+          <div class="cold-temp-big text-cyan">
+            <span id="tempCamara1">3.8</span> °C
+          </div>
+          <div class="cold-meta">
+            <span>Humedad: 82%</span> | <span>Capacidad: 65%</span>
+          </div>
+          <div class="temp-range-bar">
+            <div class="range-indicator" style="left: 45%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card cold-room-card" id="coldRoom2">
+          <div class="cold-header">
+            <h4><i class="fa-solid fa-temperature-refrigeration"></i> Cámara 02: Quesos & Maduración</h4>
+            <span class="status-pill status-ok" id="pillCamara2">OK</span>
+          </div>
+          <div class="cold-temp-big text-emerald">
+            <span id="tempCamara2">4.2</span> °C
+          </div>
+          <div class="cold-meta">
+            <span>Humedad: 88%</span> | <span>Capacidad: 80%</span>
+          </div>
+          <div class="temp-range-bar">
+            <div class="range-indicator" style="left: 50%;"></div>
+          </div>
+        </div>
+
+        <div class="glass-card cold-room-card" id="coldRoom3">
+          <div class="cold-header">
+            <h4><i class="fa-solid fa-box-tissue"></i> Cámara 03: Yogur & Mantequilla</h4>
+            <span class="status-pill status-ok">OK</span>
+          </div>
+          <div class="cold-temp-big text-purple">
+            <span id="tempCamara3">2.9</span> °C
+          </div>
+          <div class="cold-meta">
+            <span>Humedad: 75%</span> | <span>Capacidad: 45%</span>
+          </div>
+          <div class="temp-range-bar">
+            <div class="range-indicator" style="left: 35%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inventory Tables Grid -->
+      <div class="grid-2-col gap-20">
+        <!-- Stock de Insumos -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-vials"></i> Insumos y Reactivos de Proceso</h3>
+            <span class="badge info">Materia Prima</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Stock Actual</th>
+                <th>Mínimo</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Cuajo Quimosina 10X</strong></td>
+                <td>28 Litros</td>
+                <td>10 L</td>
+                <td><span class="badge success">Óptimo</span></td>
+              </tr>
+              <tr>
+                <td><strong>Cultivo Yoba (Yogur)</strong></td>
+                <td>45 Sobres</td>
+                <td>15 Sobres</td>
+                <td><span class="badge success">Óptimo</span></td>
+              </tr>
+              <tr>
+                <td><strong>Cloruro de Calcio (CaCl2)</strong></td>
+                <td>8 Kg</td>
+                <td>12 Kg</td>
+                <td><span class="badge warning">Reabastecer</span></td>
+              </tr>
+              <tr>
+                <td><strong>Empaques Queso 1Kg al Vacío</strong></td>
+                <td>2,400 Unid.</td>
+                <td>500 Unid.</td>
+                <td><span class="badge success">Óptimo</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Producto Terminado -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-cube"></i> Stock Producto Terminado</h3>
+            <span class="badge success">Disponible para Despacho</span>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Ubicación</th>
+                <th>Vencimiento Prom.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Queso Campesino (1 Kg)</strong></td>
+                <td>850 Kg</td>
+                <td>Cámara 02</td>
+                <td>15 Días</td>
+              </tr>
+              <tr>
+                <td><strong>Queso Doble Crema (500g)</strong></td>
+                <td>620 Unid.</td>
+                <td>Cámara 02</td>
+                <td>22 Días</td>
+              </tr>
+              <tr>
+                <td><strong>Leche Entera Pasteurized (1L)</strong></td>
+                <td>1,800 Bolsa</td>
+                <td>Cámara 01</td>
+                <td>5 Días</td>
+              </tr>
+              <tr>
+                <td><strong>Yogur Bebible Melocotón (1L)</strong></td>
+                <td>410 Botellas</td>
+                <td>Cámara 03</td>
+                <td>30 Días</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: FINANZAS Y COSTOS PRODUCTIVOS -->
+    <section class="tab-pane" id="tab-finanzas">
+      <div class="section-title-bar">
+        <div>
+          <h2><i class="fa-solid fa-calculator"></i> Finanzas, Estructura de Costos & Simulación de Precios</h2>
+          <p>Transparencia económica, sustentabilidad operativa y cálculo de precio justo social</p>
+        </div>
+      </div>
+
+      <div class="grid-3-col gap-20">
+        <!-- Interactive Cost Calculator -->
+        <div class="glass-card col-span-1">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-coins text-amber"></i> Simulador de Costo por Kg / Litro</h3>
+          </div>
+          <form id="financeCalcForm" class="quality-calculator-form">
+            <div class="form-group">
+              <label>Producto a Simular</label>
+              <select id="finProducto" class="form-select">
+                <option value="queso">Queso Fresco (Rend: 9.5 L/Kg)</option>
+                <option value="queso_maduro">Queso Madurado (Rend: 11 L/Kg)</option>
+                <option value="yogur">Yogur Bebible (Rend: 1.05 L/L)</option>
+                <option value="leche_env">Leche Envasada (Rend: 1.01 L/L)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Precio Pago Leche al Ganadero ($/L)</label>
+              <input type="number" id="finPrecioLeche" value="2400" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Costo Insumos y Fermentos ($/Unit)</label>
+              <input type="number" id="finCostoInsumos" value="850" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Energía, Gas & Servicios ($/Unit)</label>
+              <input type="number" id="finCostoEnergia" value="620" class="form-input">
+            </div>
+            <div class="form-group">
+              <label>Mano de Obra Directa ($/Unit)</label>
+              <input type="number" id="finCostoManoObra" value="1100" class="form-input">
+            </div>
+            <button type="button" id="btnCalcularFinanzas" class="btn-action primary full-width">
+              <i class="fa-solid fa-calculator"></i> Calcular Estructura
+            </button>
+          </form>
+
+          <div class="finance-result-card margin-top-20" id="finResultBox">
+            <div class="fin-res-item">
+              <span>Costo Materia Prima:</span>
+              <strong id="resMP">$ 22,800</strong>
+            </div>
+            <div class="fin-res-item">
+              <span>Costos Operativos Directos:</span>
+              <strong id="resOps">$ 2,570</strong>
+            </div>
+            <hr class="divider">
+            <div class="fin-res-item highlight">
+              <span>COSTO TOTAL DE PRODUCCIÓN:</span>
+              <strong id="resCostoTotal" class="text-amber">$ 25,370 / Kg</strong>
+            </div>
+            <div class="fin-res-item highlight-green">
+              <span>PRECIO JUSTO AL PUEBLO (Margen 8%):</span>
+              <strong id="resPrecioPueblo" class="text-emerald">$ 27,400 / Kg</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Overview Charts -->
+        <div class="glass-card col-span-2">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-chart-bar"></i> Comparativa: Modelo Social SMARTPRO vs Mercado Comercial</h3>
+          </div>
+          <div class="chart-wrapper">
+            <canvas id="chartFinanzas"></canvas>
+          </div>
+          
+          <div class="finance-benefits-grid margin-top-20">
+            <div class="benefit-card">
+              <i class="fa-solid fa-hand-holding-dollar text-emerald"></i>
+              <div>
+                <h4>Retorno al Productor</h4>
+                <p>El <strong>72%</strong> del valor final del producto regresa directamente al campesino local.</p>
+              </div>
+            </div>
+
+            <div class="benefit-card">
+              <i class="fa-solid fa-piggy-bank text-cyan"></i>
+              <div>
+                <h4>Ahorro al Consumidor</h4>
+                <p>El consumidor final ahorra hasta un <strong>25%</strong> en comparación con intermediarios comerciales.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: JUSTICIA SOCIAL E IMPACTO COMUNITARIO -->
+    <section class="tab-pane" id="tab-social">
+      <div class="section-title-bar">
+        <div>
+          <h2><i class="fa-solid fa-hand-holding-hand"></i> Impacto en Caridad y Justicia Social</h2>
+          <p>“Acompañando al Pueblo con caridad y justicia social” — El valor humano de la tecnología</p>
+        </div>
+      </div>
+
+      <!-- Social Banner -->
+      <div class="glass-card social-banner-card">
+        <div class="social-banner-content">
+          <div class="social-quote">
+            <i class="fa-solid fa-quote-left quote-icon"></i>
+            <h3>“Digitalizar la cadena láctea no es solo mejorar la productividad, es dignificar el trabajo campesino y alimentar al pueblo con justicia y equidad.”</h3>
+          </div>
+          <div class="social-pills">
+            <span class="social-pill"><i class="fa-solid fa-seedling"></i> Comercio Justo</span>
+            <span class="social-pill"><i class="fa-solid fa-people-roof"></i> Desarrollo Rural</span>
+            <span class="social-pill"><i class="fa-solid fa-bowl-food"></i> Inocuidad Alimentaria</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3-col gap-20 margin-top-20">
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-house-chimney-user text-amber"></i> Beneficios a Pequeños Ganaderos</h3>
+          </div>
+          <ul class="social-list">
+            <li><i class="fa-solid fa-check text-emerald"></i> <strong>Pago Oportuno Semanal:</strong> Cero retrasos en liquidaciones.</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> <strong>Bonificación por Calidad:</strong> Incentivos transparentes medidos con sensores SMARTPRO.</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> <strong>Asistencia Técnica Gratuita:</strong> Capacitación en inocuidad y manejo de ordeño limpio.</li>
+          </ul>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-utensils text-cyan"></i> Programa Leche Solidaria</h3>
+          </div>
+          <ul class="social-list">
+            <li><i class="fa-solid fa-check text-emerald"></i> <strong>Donación a Comedores:</strong> 5% de la producción diaria destinada a la primera infancia.</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> <strong>Precios Subsidiados:</strong> Leche de alta calidad a costo accesible para familias vulnerables.</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> <strong>Cero Desperdicio:</strong> Subproductos (suero) entregados a pequeños porcinocultores local.</li>
+          </ul>
+        </div>
+
+        <div class="glass-card">
+          <div class="card-header">
+            <h3><i class="fa-solid fa-trophy text-purple"></i> Indicadores de Compromiso</h3>
+          </div>
+          <div class="social-stat-box">
+            <div class="stat-big">100%</div>
+            <div class="stat-label">Transparencia en Precios</div>
+          </div>
+          <div class="social-stat-box margin-top-10">
+            <div class="stat-big text-emerald">128</div>
+            <div class="stat-label">Familias Campesinas Aliadas</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: REGISTRAR NUEVA RECEPCIÓN -->
+  <div class="modal-backdrop hidden" id="modalRecepcion">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-circle-plus"></i> Nueva Recepción de Leche Cruda</h3>
+        <button class="modal-close" id="btnCerrarModal"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formNuevoLote" class="modal-body">
+        <div class="grid-2-col gap-10">
+          <div class="form-group">
+            <label>Código de Lote</label>
+            <input type="text" id="modalLoteCode" value="LOT-2026-092" readonly class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Proveedor / Asociación</label>
+            <select id="modalProveedor" class="form-select">
+              <option value="Cooperativa El Porvenir">Cooperativa El Porvenir</option>
+              <option value="Asociación San Isidro">Asociación San Isidro</option>
+              <option value="Asociación Los Andes">Asociación Los Andes</option>
+              <option value="Finca La Esmeralda">Finca La Esmeralda</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Volumen (Litros)</label>
+            <input type="number" id="modalVolumen" value="2500" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Temperatura (°C)</label>
+            <input type="number" step="0.1" id="modalTemp" value="4.2" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Acidez (°Dornic)</label>
+            <input type="number" step="0.5" id="modalAcidez" value="16.0" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>% Materia Grasa</label>
+            <input type="number" step="0.1" id="modalGrasa" value="3.6" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>% Proteína</label>
+            <input type="number" step="0.1" id="modalProteina" value="3.2" required class="form-input">
+          </div>
+          <div class="form-group">
+            <label>Test Antibióticos</label>
+            <select id="modalAntibioticos" class="form-select">
+              <option value="NEGATIVO">NEGATIVO (Aprobado)</option>
+              <option value="POSITIVO">POSITIVO (Rechazado)</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer margin-top-20">
+          <button type="button" class="btn-action outline" id="btnCancelarModal">Cancelar</button>
+          <button type="submit" class="btn-action primary"><i class="fa-solid fa-check"></i> Registrar & Evaluar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Script JS -->
+  <script src="java.js" defer></script>
+</body>
+</html>
