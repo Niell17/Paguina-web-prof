@@ -1,0 +1,189 @@
+{
+  "planta": {
+    "nombre": "Albihar Lácteos",
+    "sistema": "SMARTPRO",
+    "version": "v3.5",
+    "slogan": "Acompañando al Pueblo con caridad y justicia social",
+    "estado": "Planta Activa | Sensores en Línea"
+  },
+  "kpis": {
+    "volumenRecepcion": "38,450 L",
+    "variacionVolumen": "+8.2% vs semana ant.",
+    "tasaCalidad": "97.4%",
+    "antibioticos": "0% Antibióticos detectados",
+    "produccionQuesoYogur": "3,920 Kg",
+    "lotesEnProceso": 4,
+    "pagoJusto": "$ 2,450 / L",
+    "beneficioMercado": "+15% sobre precio de mercado"
+  },
+  "recepciones": [
+    {
+      "id": "LOT-2026-089",
+      "proveedor": "Coovamoras / San Isidro",
+      "volumen": 3200,
+      "temp": 4.2,
+      "acidez": 16.0,
+      "grasa": 3.7,
+      "proteina": 3.3,
+      "antibioticos": "NEGATIVO",
+      "dictamen": "GRADO A",
+      "pagoProductor": 2450,
+      "fecha": "Hoy 06:45 AM"
+    },
+    {
+      "id": "LOT-2026-090",
+      "proveedor": "Asociación Los Andes",
+      "volumen": 4500,
+      "temp": 4.8,
+      "acidez": 17.0,
+      "grasa": 3.5,
+      "proteina": 3.1,
+      "antibioticos": "NEGATIVO",
+      "dictamen": "GRADO A",
+      "pagoProductor": 2300,
+      "fecha": "Hoy 07:30 AM"
+    },
+    {
+      "id": "LOT-2026-091",
+      "proveedor": "Finca La Esmeralda",
+      "volumen": 1800,
+      "temp": 5.5,
+      "acidez": 17.5,
+      "grasa": 3.4,
+      "proteina": 3.0,
+      "antibioticos": "NEGATIVO",
+      "dictamen": "GRADO B",
+      "pagoProductor": 2200,
+      "fecha": "Hoy 08:15 AM"
+    },
+    {
+      "id": "LOT-2026-088",
+      "proveedor": "Intermediario N.N.",
+      "volumen": 1200,
+      "temp": 9.2,
+      "acidez": 21.0,
+      "grasa": 3.1,
+      "proteina": 2.8,
+      "antibioticos": "POSITIVO",
+      "dictamen": "RECHAZADO",
+      "pagoProductor": 0,
+      "fecha": "Ayer 04:20 PM"
+    }
+  ],
+  "maquinas": [
+    {
+      "id": "PAST-01",
+      "nombre": "Pasteurizador HTST #01",
+      "especificaciones": "Capacidad: 5,000 L/h | Temp Target: 72.5°C",
+      "valorActual": "72.4°C",
+      "porcentajeBarra": 96,
+      "estado": "OPERATIVO",
+      "claseEstado": "status-ok"
+    },
+    {
+      "id": "DESN-01",
+      "nombre": "Desnatadora & Homogeneizadora",
+      "especificaciones": "Velocidad: 6,200 RPM | Grasa salida: 3.2%",
+      "valorActual": "6,180 RPM",
+      "porcentajeBarra": 92,
+      "estado": "OPERATIVO",
+      "claseEstado": "status-ok"
+    },
+    {
+      "id": "TINA-03",
+      "nombre": "Tina Quesera Automatizada #03",
+      "especificaciones": "Capacidad: 3,000 L | Coagulación en proceso",
+      "valorActual": "34.1°C",
+      "porcentajeBarra": 78,
+      "estado": "CORTE DULCE",
+      "claseEstado": "status-warning"
+    },
+    {
+      "id": "CAM-01",
+      "nombre": "Cámara Frigorífica 01 (Maduración)",
+      "especificaciones": "Temp Control: 4.0°C | Humedad: 85%",
+      "valorActual": "4.1°C",
+      "porcentajeBarra": 98,
+      "estado": "ESTABLE",
+      "claseEstado": "status-ok"
+    }
+  ],
+  "camarasFrio": [
+    {
+      "id": 1,
+      "nombre": "Cámara 01: Leche Cruda & Silos",
+      "temp": 3.8,
+      "humedad": "82%",
+      "capacidad": "65%",
+      "estado": "OK"
+    },
+    {
+      "id": 2,
+      "nombre": "Cámara 02: Quesos & Maduración",
+      "temp": 4.2,
+      "humedad": "88%",
+      "capacidad": "80%",
+      "estado": "OK"
+    },
+    {
+      "id": 3,
+      "nombre": "Cámara 03: Yogur & Mantequilla",
+      "temp": 2.9,
+      "humedad": "75%",
+      "capacidad": "45%",
+      "estado": "OK"
+    }
+  ],
+  "insumos": [
+    {
+      "item": "Cuajo Quimosina 10X",
+      "stock": "28 Litros",
+      "minimo": "10 L",
+      "estado": "Óptimo"
+    },
+    {
+      "item": "Cultivo Yoba (Yogur)",
+      "stock": "45 Sobres",
+      "minimo": "15 Sobres",
+      "estado": "Óptimo"
+    },
+    {
+      "item": "Cloruro de Calcio (CaCl2)",
+      "stock": "8 Kg",
+      "minimo": "12 Kg",
+      "estado": "Reabastecer"
+    },
+    {
+      "item": "Empaques Queso 1Kg al Vacío",
+      "stock": "2,400 Unid.",
+      "minimo": "500 Unid.",
+      "estado": "Óptimo"
+    }
+  ],
+  "productoTerminado": [
+    {
+      "producto": "Queso Campesino (1 Kg)",
+      "cantidad": "850 Kg",
+      "ubicacion": "Cámara 02",
+      "vencimiento": "15 Días"
+    },
+    {
+      "producto": "Queso Doble Crema (500g)",
+      "cantidad": "620 Unid.",
+      "ubicacion": "Cámara 02",
+      "vencimiento": "22 Días"
+    },
+    {
+      "producto": "Leche Entera Pasteurized (1L)",
+      "cantidad": "1,800 Bolsa",
+      "ubicacion": "Cámara 01",
+      "vencimiento": "5 Días"
+    },
+    {
+      "producto": "Yogur Bebible Melocotón (1L)",
+      "cantidad": "410 Botellas",
+      "ubicacion": "Cámara 03",
+      "vencimiento": "30 Días"
+    }
+  ]
+}

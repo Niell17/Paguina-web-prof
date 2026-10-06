@@ -36,16 +36,6 @@
   --font-heading: 'Outfit', sans-serif;
 }
 
-/* Light & Dark Theme Mapping - Defaults to Clean Light Theme matching screenshot */
-body, body.dark-theme, body.light-theme {
-  --bg-main: #f4f5f8;
-  --bg-card: #ffffff;
-  --bg-card-hover: #fafafa;
-  --border-color: #e5e7eb;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.04);
-}
 
 /* Reset & Base Styles */
 * {

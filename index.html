@@ -15,7 +15,7 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="estilos.css">
 </head>
-<body class="dark-theme">
+<body>
 
   <!-- Header Institucional -->
   <header class="app-header">
@@ -76,6 +76,9 @@
       <div class="header-actions">
         <button class="btn-action primary" id="btnNuevoLote">
           <i class="fa-solid fa-plus"></i> Nueva Recepción
+        </button>
+        <button class="btn-action outline" id="btnModuloJson">
+          <i class="fa-solid fa-file-code"></i> Módulo JSON
         </button>
         <button class="btn-action outline" id="btnImprimirReporte">
           <i class="fa-solid fa-file-pdf"></i> Reporte
@@ -595,31 +598,8 @@
                 <th>Estado</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>Cuajo Quimosina 10X</strong></td>
-                <td>28 Litros</td>
-                <td>10 L</td>
-                <td><span class="badge success">Óptimo</span></td>
-              </tr>
-              <tr>
-                <td><strong>Cultivo Yoba (Yogur)</strong></td>
-                <td>45 Sobres</td>
-                <td>15 Sobres</td>
-                <td><span class="badge success">Óptimo</span></td>
-              </tr>
-              <tr>
-                <td><strong>Cloruro de Calcio (CaCl2)</strong></td>
-                <td>8 Kg</td>
-                <td>12 Kg</td>
-                <td><span class="badge warning">Reabastecer</span></td>
-              </tr>
-              <tr>
-                <td><strong>Empaques Queso 1Kg al Vacío</strong></td>
-                <td>2,400 Unid.</td>
-                <td>500 Unid.</td>
-                <td><span class="badge success">Óptimo</span></td>
-              </tr>
+            <tbody id="tbodyInsumos">
+              <!-- Carga dinámica desde datos.json -->
             </tbody>
           </table>
         </div>
@@ -639,31 +619,8 @@
                 <th>Vencimiento Prom.</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td><strong>Queso Campesino (1 Kg)</strong></td>
-                <td>850 Kg</td>
-                <td>Cámara 02</td>
-                <td>15 Días</td>
-              </tr>
-              <tr>
-                <td><strong>Queso Doble Crema (500g)</strong></td>
-                <td>620 Unid.</td>
-                <td>Cámara 02</td>
-                <td>22 Días</td>
-              </tr>
-              <tr>
-                <td><strong>Leche Entera Pasteurized (1L)</strong></td>
-                <td>1,800 Bolsa</td>
-                <td>Cámara 01</td>
-                <td>5 Días</td>
-              </tr>
-              <tr>
-                <td><strong>Yogur Bebible Melocotón (1L)</strong></td>
-                <td>410 Botellas</td>
-                <td>Cámara 03</td>
-                <td>30 Días</td>
-              </tr>
+            <tbody id="tbodyProductoTerminado">
+              <!-- Carga dinámica desde datos.json -->
             </tbody>
           </table>
         </div>
@@ -887,6 +844,43 @@
           <button type="submit" class="btn-action primary"><i class="fa-solid fa-check"></i> Registrar & Evaluar</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- MODAL: GESTIÓN Y LECTURA DE DATOS JSON -->
+  <div class="modal-backdrop hidden" id="modalJson">
+    <div class="modal-card" style="max-width: 750px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-code text-amber"></i> Módulo de Lectura y Gestión JSON</h3>
+        <button class="modal-close" id="btnCerrarModalJson"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 16px; font-size: 0.88rem; color: var(--text-muted);">
+          Administre, recupere y visualice la información del sistema leyendo directamente el archivo <code>datos.json</code> o cargando/exportando copias de respaldo.
+        </p>
+
+        <div class="grid-3-col gap-10 margin-bottom-20">
+          <button class="btn-action primary" id="btnLeerJson">
+            <i class="fa-solid fa-rotate"></i> Leer datos.json
+          </button>
+          <button class="btn-action outline" id="btnExportarJson">
+            <i class="fa-solid fa-download"></i> Exportar a JSON
+          </button>
+          <label class="btn-action outline" style="cursor: pointer; display: inline-flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-upload"></i> Importar JSON
+            <input type="file" id="inputImportarJson" accept=".json" style="display: none;">
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label>Contenido JSON (Lectura en Tiempo Real)</label>
+          <textarea id="jsonViewerArea" class="form-input" rows="11" readonly style="font-family: monospace; font-size: 0.82rem; background: #f8fafc; resize: vertical;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-action outline" id="btnCopiarJson"><i class="fa-solid fa-copy"></i> Copiar al Portapapeles</button>
+        <button class="btn-action primary" id="btnCerrarJsonFooter">Cerrar</button>
+      </div>
     </div>
   </div>
 

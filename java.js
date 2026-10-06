@@ -1,78 +1,41 @@
-/* ==========================================================================
-   SMARTPRO - Digitalización y Eficiencia Productiva Láctea
-   JavaScript Application Core
-   ========================================================================== */
-
 document.addEventListener('DOMContentLoaded', () => {
 
   // --------------------------------------------------------------------------
-  // 1. DATA STATE & STORE
+  // 1. DATA STATE STORE
   // --------------------------------------------------------------------------
   const appState = {
-    theme: 'dark',
+    theme: 'light',
     recepciones: [
-      {
-        id: 'LOT-2026-089',
-        proveedor: 'Coovamoras / San Isidro',
-        volumen: 3200,
-        temp: 4.2,
-        acidez: 16.0,
-        grasa: 3.7,
-        proteina: 3.3,
-        antibioticos: 'NEGATIVO',
-        dictamen: 'GRADO A',
-        pagoProductor: 2450,
-        fecha: 'Hoy 06:45 AM'
-      },
-      {
-        id: 'LOT-2026-090',
-        proveedor: 'Asociación Los Andes',
-        volumen: 4500,
-        temp: 4.8,
-        acidez: 17.0,
-        grasa: 3.5,
-        proteina: 3.1,
-        antibioticos: 'NEGATIVO',
-        dictamen: 'GRADO A',
-        pagoProductor: 2300,
-        fecha: 'Hoy 07:30 AM'
-      },
-      {
-        id: 'LOT-2026-091',
-        proveedor: 'Finca La Esmeralda',
-        volumen: 1800,
-        temp: 5.5,
-        acidez: 17.5,
-        grasa: 3.4,
-        proteina: 3.0,
-        antibioticos: 'NEGATIVO',
-        dictamen: 'GRADO B',
-        pagoProductor: 2200,
-        fecha: 'Hoy 08:15 AM'
-      },
-      {
-        id: 'LOT-2026-088',
-        proveedor: 'Intermediario N.N.',
-        volumen: 1200,
-        temp: 9.2,
-        acidez: 21.0,
-        grasa: 3.1,
-        proteina: 2.8,
-        antibioticos: 'POSITIVO',
-        dictamen: 'RECHAZADO',
-        pagoProductor: 0,
-        fecha: 'Ayer 04:20 PM'
-      }
+      { id: 'LOT-2026-089', proveedor: 'Coovamoras / San Isidro', volumen: 3200, temp: 4.2, acidez: 16.0, grasa: 3.7, proteina: 3.3, antibioticos: 'NEGATIVO', dictamen: 'GRADO A', pagoProductor: 2450, fecha: 'Hoy 06:45 AM' },
+      { id: 'LOT-2026-090', proveedor: 'Asociación Los Andes', volumen: 4500, temp: 4.8, acidez: 17.0, grasa: 3.5, proteina: 3.1, antibioticos: 'NEGATIVO', dictamen: 'GRADO A', pagoProductor: 2300, fecha: 'Hoy 07:30 AM' },
+      { id: 'LOT-2026-091', proveedor: 'Finca La Esmeralda', volumen: 1800, temp: 5.5, acidez: 17.5, grasa: 3.4, proteina: 3.0, antibioticos: 'NEGATIVO', dictamen: 'GRADO B', pagoProductor: 2200, fecha: 'Hoy 08:15 AM' },
+      { id: 'LOT-2026-088', proveedor: 'Intermediario N.N.', volumen: 1200, temp: 9.2, acidez: 21.0, grasa: 3.1, proteina: 2.8, antibioticos: 'POSITIVO', dictamen: 'RECHAZADO', pagoProductor: 0, fecha: 'Ayer 04:20 PM' }
+    ],
+    insumos: [
+      { item: 'Cuajo Quimosina 10X', stock: '28 Litros', minimo: '10 L', estado: 'Óptimo' },
+      { item: 'Cultivo Yoba (Yogur)', stock: '45 Sobres', minimo: '15 Sobres', estado: 'Óptimo' },
+      { item: 'Cloruro de Calcio (CaCl2)', stock: '8 Kg', minimo: '12 Kg', estado: 'Reabastecer' },
+      { item: 'Empaques Queso 1Kg al Vacío', stock: '2,400 Unid.', minimo: '500 Unid.', estado: 'Óptimo' }
+    ],
+    productoTerminado: [
+      { producto: 'Queso Campesino (1 Kg)', cantidad: '850 Kg', ubicacion: 'Cámara 02', vencimiento: '15 Días' },
+      { producto: 'Queso Doble Crema (500g)', cantidad: '620 Unid.', ubicacion: 'Cámara 02', vencimiento: '22 Días' },
+      { producto: 'Leche Entera Pasteurized (1L)', cantidad: '1,800 Bolsa', ubicacion: 'Cámara 01', vencimiento: '5 Días' },
+      { producto: 'Yogur Bebible Melocotón (1L)', cantidad: '410 Botellas', ubicacion: 'Cámara 03', vencimiento: '30 Días' }
     ],
     nextLotNumber: 92,
     chartInstances: {}
   };
 
   // --------------------------------------------------------------------------
-  // 2. INITIALIZATION
+  // 2. INITIALIZATION & DYNAMIC JSON LOAD
   // --------------------------------------------------------------------------
+  renderAllTables();
+  updateDashboardMetrics();
+  loadJsonData();
   initClock();
   initTabNavigation();
+  initDashboardControls();
   initThemeToggle();
   initQualityCalculator();
   initTableRenderer();
@@ -82,6 +45,34 @@ document.addEventListener('DOMContentLoaded', () => {
   initFinanceCalculator();
   initReportGenerator();
   initCharts();
+  initJsonModule();
+
+  function applyJsonData(data) {
+    if (!data) return;
+    if (data.recepciones) appState.recepciones = data.recepciones;
+    if (data.insumos) appState.insumos = data.insumos;
+    if (data.productoTerminado) appState.productoTerminado = data.productoTerminado;
+    if (data.maquinas) appState.maquinas = data.maquinas;
+    if (data.camarasFrio) appState.camarasFrio = data.camarasFrio;
+    if (data.kpis) appState.kpis = data.kpis;
+
+    renderAllTables();
+    updateDashboardMetrics();
+  }
+
+  function loadJsonData() {
+    fetch('datos.json')
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo cargar datos.json');
+        return res.json();
+      })
+      .then(data => {
+        applyJsonData(data);
+      })
+      .catch(err => {
+        console.info('Renderizado con datos locales activado:', err.message);
+      });
+  }
 
   // --------------------------------------------------------------------------
   // 3. LIVE CLOCK
@@ -126,6 +117,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     });
+  }
+
+  // --------------------------------------------------------------------------
+  // DASHBOARD CONTROLS
+  // --------------------------------------------------------------------------
+  function initDashboardControls() {
+    const btnRefresh = document.getElementById('btnRefreshDash');
+    if (btnRefresh) {
+      btnRefresh.addEventListener('click', () => {
+        updateDashboardMetrics();
+        showToast('Datos del dashboard actualizados en tiempo real', 'info');
+      });
+    }
+
+    const periodSelect = document.getElementById('dashPeriodSelect');
+    if (periodSelect) {
+      periodSelect.addEventListener('change', (e) => {
+        const text = e.target.options[e.target.selectedIndex].text;
+        showToast(`Vista filtrada por: ${text}`, 'info');
+      });
+    }
   }
 
   // --------------------------------------------------------------------------
@@ -248,14 +260,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tbody.innerHTML = '';
 
-    const filtered = appState.recepciones.filter(r => 
-      r.id.toLowerCase().includes(filterQuery) || 
+    const filtered = appState.recepciones.filter(r =>
+      r.id.toLowerCase().includes(filterQuery) ||
       r.proveedor.toLowerCase().includes(filterQuery)
     );
 
     filtered.forEach(item => {
       const tr = document.createElement('tr');
-      
+
       let badgeClass = 'badge success';
       if (item.dictamen === 'GRADO B') badgeClass = 'badge warning';
       if (item.dictamen === 'RECHAZADO') badgeClass = 'badge status-warning';
@@ -290,6 +302,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function renderAllTables() {
+    renderTable();
+    renderInsumosTable();
+    renderProductoTerminadoTable();
+  }
+
+  function renderInsumosTable() {
+    const tbody = document.getElementById('tbodyInsumos');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    appState.insumos.forEach(item => {
+      const tr = document.createElement('tr');
+      const badgeClass = item.estado === 'Óptimo' ? 'badge success' : 'badge warning';
+      tr.innerHTML = `
+        <td><strong>${item.item}</strong></td>
+        <td>${item.stock}</td>
+        <td>${item.minimo}</td>
+        <td><span class="${badgeClass}">${item.estado}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderProductoTerminadoTable() {
+    const tbody = document.getElementById('tbodyProductoTerminado');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+
+    appState.productoTerminado.forEach(item => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${item.producto}</strong></td>
+        <td>${item.cantidad}</td>
+        <td>${item.ubicacion}</td>
+        <td>${item.vencimiento}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
   // --------------------------------------------------------------------------
   // 8. MODAL LOGIC FOR NEW RECEPCTION
   // --------------------------------------------------------------------------
@@ -319,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const code = document.getElementById('modalLoteCode').value;
         const prov = document.getElementById('modalProveedor').value;
         const vol = parseFloat(document.getElementById('modalVolumen').value) || 0;
@@ -383,7 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function triggerTraceSearch(batchId) {
     const batchIdEl = document.getElementById('traceBatchId');
     const statusBadge = document.getElementById('traceStatusBadge');
-    
+
     if (batchIdEl) batchIdEl.textContent = batchId;
 
     const found = appState.recepciones.find(r => r.id.toLowerCase() === batchId.toLowerCase());
@@ -691,6 +744,135 @@ document.addEventListener('DOMContentLoaded', () => {
       toast.style.transition = 'all 0.3s ease';
       setTimeout(() => toast.remove(), 300);
     }, 4000);
+  }
+
+  // --------------------------------------------------------------------------
+  // 15. MÓDULO DE LECTURA Y GESTIÓN JSON
+  // --------------------------------------------------------------------------
+  function initJsonModule() {
+    const btnOpen = document.getElementById('btnModuloJson');
+    const modal = document.getElementById('modalJson');
+    const btnClose1 = document.getElementById('btnCerrarModalJson');
+    const btnClose2 = document.getElementById('btnCerrarJsonFooter');
+    const btnFetch = document.getElementById('btnLeerJson');
+    const btnExport = document.getElementById('btnExportarJson');
+    const inputImport = document.getElementById('inputImportarJson');
+    const btnCopy = document.getElementById('btnCopiarJson');
+    const viewer = document.getElementById('jsonViewerArea');
+
+    if (btnOpen && modal) {
+      btnOpen.addEventListener('click', () => {
+        modal.classList.remove('hidden');
+        cargarVistaPreviaJson();
+      });
+    }
+
+    function closeModal() {
+      if (modal) modal.classList.add('hidden');
+    }
+
+    if (btnClose1) btnClose1.addEventListener('click', closeModal);
+    if (btnClose2) btnClose2.addEventListener('click', closeModal);
+
+    // Leer / Recargar datos.json
+    if (btnFetch) {
+      btnFetch.addEventListener('click', () => {
+        fetch('datos.json')
+          .then(res => {
+            if (!res.ok) throw new Error('Error al acceder a datos.json');
+            return res.json();
+          })
+          .then(data => {
+            applyJsonData(data);
+            if (viewer) viewer.value = JSON.stringify(data, null, 2);
+            showToast('datos.json leído exitosamente', 'success');
+          })
+          .catch(err => {
+            cargarVistaPreviaJson();
+            showToast('Lectura realizada desde el estado local', 'info');
+          });
+      });
+    }
+
+    // Exportar estado actual a archivo .json descargable
+    if (btnExport) {
+      btnExport.addEventListener('click', () => {
+        const exportData = {
+          planta: {
+            nombre: 'Albihar Lácteos',
+            sistema: 'SMARTPRO',
+            fechaExportacion: new Date().toISOString()
+          },
+          recepciones: appState.recepciones,
+          insumos: appState.insumos,
+          productoTerminado: appState.productoTerminado,
+          maquinas: appState.maquinas,
+          camarasFrio: appState.camarasFrio
+        };
+
+        const jsonStr = JSON.stringify(exportData, null, 2);
+        const blob = new Blob([jsonStr], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `datos_smartpro_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        showToast('Datos exportados a archivo .json descargado', 'success');
+      });
+    }
+
+    // Importar archivo .json externo
+    if (inputImport) {
+      inputImport.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const parsed = JSON.parse(event.target.result);
+            applyJsonData(parsed);
+            if (viewer) viewer.value = JSON.stringify(parsed, null, 2);
+            showToast('Archivo JSON importado y aplicado correctamente', 'success');
+          } catch (err) {
+            showToast('Archivo JSON no válido o corrupto', 'warning');
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    // Copiar JSON al portapapeles
+    if (btnCopy && viewer) {
+      btnCopy.addEventListener('click', () => {
+        if (!viewer.value) return;
+        navigator.clipboard.writeText(viewer.value)
+          .then(() => showToast('Contenido JSON copiado al portapapeles', 'success'))
+          .catch(() => {
+            viewer.select();
+            document.execCommand('copy');
+            showToast('Copiado al portapapeles', 'success');
+          });
+      });
+    }
+
+    function cargarVistaPreviaJson() {
+      if (!viewer) return;
+      fetch('datos.json')
+        .then(res => res.json())
+        .then(data => {
+          viewer.value = JSON.stringify(data, null, 2);
+        })
+        .catch(() => {
+          const fallback = {
+            planta: { nombre: 'Albihar Lácteos', sistema: 'SMARTPRO' },
+            recepciones: appState.recepciones
+          };
+          viewer.value = JSON.stringify(fallback, null, 2);
+        });
+    }
   }
 
 });
